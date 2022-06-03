@@ -33,6 +33,10 @@ require('packer').startup(function()
     },
   }
   use 'lewis6991/gitsigns.nvim'
+  use {
+    'prettier/vim-prettier',
+    ft = { 'javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html' }
+  }
 end)
 
 -- Editor
@@ -64,6 +68,9 @@ require('indent_blankline').setup {
   show_current_context = true,
   show_current_context_start = true,
 }
+
+vim.cmd[[let g:prettier#autoformat = 1]]
+vim.cmd[[let g:prettier#autoformat_require_pragma = 0]]
 
 -- Theme
 set.background = 'dark'
@@ -106,7 +113,7 @@ capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 local lspconfig = require('lspconfig')
 
-local servers = { 'pyright', 'rust_analyzer', 'tsserver' }
+local servers = { 'pyright', 'rust_analyzer', 'tsserver', 'solargraph', 'sumneko_lua', 'eslint' }
 for _, lsp in pairs(servers) do
   lspconfig[lsp].setup{
     on_attach = on_attach,
@@ -176,6 +183,13 @@ require'nvim-tree'.setup{
 -- Gitsigns
 require'gitsigns'.setup()
 
+-- Telescope
+require'telescope'.setup{
+  defaults = {
+    file_ignore_patterns = {"node_modules"}
+  }
+}
+
 -- Keymaps
 vim.keymap.set('n', '<leader>/', ':nohlsearch<CR>')
 vim.keymap.set('n', '<leader>s', ':source init.lua<CR>')
@@ -186,11 +200,10 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
 vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 
-local telescope = require('telescope.builtin')
-vim.keymap.set('n', '<space>p', telescope.find_files)
-vim.keymap.set('n', '<space>g', telescope.live_grep)
-vim.keymap.set('n', '<space>b', telescope.buffers)
-vim.keymap.set('n', '<space>h', telescope.help_tags)
+vim.keymap.set('n', '<space>p', require('telescope.builtin').find_files)
+vim.keymap.set('n', '<space>g', require('telescope.builtin').live_grep)
+vim.keymap.set('n', '<space>b', require('telescope.builtin').buffers)
+vim.keymap.set('n', '<space>h', require('telescope.builtin').help_tags)
 
 vim.keymap.set('n', '<space>s', ':SymbolsOutline<CR>')
 
