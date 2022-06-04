@@ -37,6 +37,9 @@ require('packer').startup(function()
     'prettier/vim-prettier',
     ft = { 'javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html' }
   }
+  use 'sunjon/shade.nvim'
+  use 'windwp/nvim-autopairs'
+  use 'p00f/nvim-ts-rainbow'
 end)
 
 -- Editor
@@ -71,6 +74,9 @@ require('indent_blankline').setup {
 
 vim.cmd[[let g:prettier#autoformat = 1]]
 vim.cmd[[let g:prettier#autoformat_require_pragma = 0]]
+
+require'shade'.setup()
+require'nvim-autopairs'.setup()
 
 -- Theme
 set.background = 'dark'
@@ -171,6 +177,11 @@ require'nvim-treesitter.configs'.setup {
   sync_install = false,
   highlight = {
     enable = true
+  },
+  rainbow = {
+    enable = true,
+    extended_mode = true,
+    max_file_lines = nil,
   }
 }
 
