@@ -37,7 +37,6 @@ require('packer').startup(function()
     'prettier/vim-prettier',
     ft = { 'javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html' }
   }
-  use 'sunjon/shade.nvim'
   use 'windwp/nvim-autopairs'
   use 'p00f/nvim-ts-rainbow'
 end)
@@ -75,7 +74,6 @@ require('indent_blankline').setup {
 vim.cmd[[let g:prettier#autoformat = 1]]
 vim.cmd[[let g:prettier#autoformat_require_pragma = 0]]
 
-require'shade'.setup()
 require'nvim-autopairs'.setup()
 
 -- Theme
