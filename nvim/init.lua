@@ -218,6 +218,29 @@ vim.keymap.set('n', '<space>s', ':SymbolsOutline<CR>')
 
 vim.keymap.set('n', '<space>n', ':NvimTreeToggle<CR>')
 
+local map = vim.api.nvim_set_keymap
+map('n', 'gT', '<Cmd>BufferPrevious<CR>', opts)
+map('n', 'gt', '<Cmd>BufferNext<CR>', opts)
+map('n', 'g<', '<Cmd>BufferMovePrevious<CR>', opts)
+map('n', 'g>', '<Cmd>BufferMoveNext<CR>', opts)
+map('n', 'g1', '<Cmd>BufferGoto 1<CR>', opts)
+map('n', 'g2', '<Cmd>BufferGoto 2<CR>', opts)
+map('n', 'g3', '<Cmd>BufferGoto 3<CR>', opts)
+map('n', 'g4', '<Cmd>BufferGoto 4<CR>', opts)
+map('n', 'g5', '<Cmd>BufferGoto 5<CR>', opts)
+map('n', 'g6', '<Cmd>BufferGoto 6<CR>', opts)
+map('n', 'g7', '<Cmd>BufferGoto 7<CR>', opts)
+map('n', 'g8', '<Cmd>BufferGoto 8<CR>', opts)
+map('n', 'g9', '<Cmd>BufferGoto 9<CR>', opts)
+map('n', 'g0', '<Cmd>BufferLast<CR>', opts)
+map('n', 'gp', '<Cmd>BufferPin<CR>', opts)
+map('n', 'gc', '<Cmd>BufferClose<CR>', opts)
+map('n', '<C-p>', '<Cmd>BufferPick<CR>', opts)
+map('n', '<Space>bb', '<Cmd>BufferOrderByBufferNumber<CR>', opts)
+map('n', '<Space>bd', '<Cmd>BufferOrderByDirectory<CR>', opts)
+map('n', '<Space>bl', '<Cmd>BufferOrderByLanguage<CR>', opts)
+map('n', '<Space>bw', '<Cmd>BufferOrderByWindowNumber<CR>', opts)
+
 -- Config Group
 local autocmd_config = {
   {
