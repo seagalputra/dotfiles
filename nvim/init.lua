@@ -39,6 +39,7 @@ require('packer').startup(function()
   }
   use 'windwp/nvim-autopairs'
   use 'p00f/nvim-ts-rainbow'
+  use 'mattn/emmet-vim'
 end)
 
 -- Editor
