@@ -138,7 +138,7 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 local lspconfig = require('lspconfig')
 
-local servers = { 'pyright', 'rust_analyzer', 'tsserver', 'solargraph', 'sumneko_lua', 'eslint', 'gopls', 'astro' }
+local servers = { 'pyright', 'rust_analyzer', 'tsserver', 'solargraph', 'sumneko_lua', 'eslint', 'gopls', 'astro', 'cmake', 'clangd' }
 for _, lsp in pairs(servers) do
   lspconfig[lsp].setup {
     on_attach = on_attach,
