@@ -38,6 +38,7 @@ require('packer').startup(function()
   use 'mattn/emmet-vim'
   use 'Mofiqul/adwaita.nvim'
   use { 'prettier/vim-prettier', run = 'yarn install --frozen-lockfile --production' }
+  use 'prisma/vim-prisma'
 end)
 
 -- Editor
