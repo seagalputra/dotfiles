@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal macOS configuration for **zsh**, **tmux**, and **mise**, managed with [GNU Stow](https://www.gnu.org/software/stow/).
+Personal macOS configuration for **zsh**, **tmux**, **Ghostty**, and **mise**, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
 Each top-level directory is a Stow *package* that mirrors the layout of `$HOME`. Installing a package creates symlinks from your home directory into this repository, so every change is tracked in Git.
 
@@ -10,6 +10,7 @@ Each top-level directory is a Stow *package* that mirrors the layout of `$HOME`.
 |---------|----------|---------|
 | `zsh`   | `~/.zshrc` | Single, fast (~0.15s) zsh config: plain zsh (no framework), [Starship](https://starship.rs) prompt, case-insensitive completion, shared history, prefix history search |
 | `tmux`  | `~/.tmux.conf` | Minimal tmux config tuned for [Ghostty](https://ghostty.org): true color, extended keys (Shift+Enter works in Claude Code), new panes/windows open in the current directory |
+| `ghostty` | `~/.config/ghostty/` | Minimal [Ghostty](https://ghostty.org) config; every window opens in tmux via `ghostty-tmux.sh` (attaches to session `base` or creates it) |
 | `mise`  | `~/.config/mise/config.toml` | Global language versions via [mise](https://mise.jdx.dev): Node, Python, Ruby, Java, Erlang, Elixir |
 
 ## Requirements

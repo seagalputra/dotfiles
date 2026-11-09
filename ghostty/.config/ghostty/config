@@ -1,0 +1,7 @@
+# Ghostty config — only overrides; everything else uses Ghostty defaults.
+# Full reference: ghostty +show-config --default --docs
+
+# Open every window inside tmux (attach to session "base" or create it)
+command = ~/.config/ghostty/ghostty-tmux.sh
+
+font-size = 15
