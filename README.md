@@ -25,8 +25,11 @@ Each top-level directory is a Stow *package* that mirrors the layout of `$HOME`.
 ```sh
 git clone git@github.com:seagalputra/dotfiles.git ~/Documents/sources/dotfiles
 cd ~/Documents/sources/dotfiles
+make brew        # optional: CLI tools and apps from the Brewfile
 make bootstrap
 ```
+
+`brew` installs everything listed in the [`Brewfile`](Brewfile). Rust is not included; install it with [rustup](https://rustup.rs).
 
 `bootstrap` will:
 
@@ -53,6 +56,7 @@ make install
 | Command | Description |
 |---------|-------------|
 | `make` / `make help` | List available targets and detected packages |
+| `make brew` | Install tools and apps from the `Brewfile` |
 | `make bootstrap` | Full setup on a new machine |
 | `make install` | Symlink all packages into `~` |
 | `make uninstall` | Remove all symlinks created by this repo |

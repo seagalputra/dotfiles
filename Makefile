@@ -7,11 +7,15 @@ STOW     := stow
 MISE     := $$(command -v mise || echo $(HOME)/.local/bin/mise)
 
 .DEFAULT_GOAL := help
-.PHONY: help bootstrap install uninstall restow dry-run check
+.PHONY: help brew bootstrap install uninstall restow dry-run check
 
 help: ## Show available targets
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  make %-10s %s\n", $$1, $$2}'
 	@echo "  packages: $(PACKAGES)"
+
+brew: ## Install tools and apps from the Brewfile
+	@command -v brew >/dev/null || { echo "Homebrew is required first: https://brew.sh"; exit 1; }
+	brew bundle --file=Brewfile
 
 bootstrap: ## New machine: install stow + mise, link dotfiles, install tools
 	@command -v brew >/dev/null || { echo "Homebrew is required first: https://brew.sh"; exit 1; }
