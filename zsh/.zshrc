@@ -4,8 +4,9 @@
 # hence the interactive-only block at the bottom.
 
 # ── Environment & PATH ────────────────────────────────────────────────────
-eval "$(/opt/homebrew/bin/brew shellenv)"
-. "$HOME/.cargo/env"
+# Optional tools are guarded so a fresh machine starts cleanly without them.
+[[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
 
 export PATH="$HOME/.local/bin:$PATH"        # mise, uv, claude, pipx, …
 export PATH="$PATH:$HOME/.docker/bin"
@@ -14,7 +15,7 @@ export PATH="$PATH:$HOME/.risc0/bin"
 
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
-. "$HOME/.deno/env"
+[[ -f "$HOME/.deno/env" ]] && . "$HOME/.deno/env"
 
 # Herd injected PHP 8.4 configuration.
 export HERD_PHP_84_INI_SCAN_DIR="/Users/seagalputra/Library/Application Support/Herd/config/php/84/"
@@ -28,7 +29,7 @@ export HERD_PHP_85_INI_SCAN_DIR="/Users/seagalputra/Library/Application Support/
 export EDITOR=nvim
 
 # mise: node, python, ruby, java, erlang, elixir (config: ~/.config/mise/config.toml)
-eval "$(mise activate zsh)"
+(( $+commands[mise] )) && eval "$(mise activate zsh)"
 
 # ── Interactive only ──────────────────────────────────────────────────────
 [[ -o interactive ]] || return
@@ -52,7 +53,7 @@ autoload -Uz compinit && compinit
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
 [[ -s "$BUN_INSTALL/_bun" ]] && source "$BUN_INSTALL/_bun"
-source <(kubectl completion zsh)
+(( $+commands[kubectl] )) && source <(kubectl completion zsh)
 
 # Keys: emacs mode; up/down search history by what's already typed
 bindkey -e
@@ -63,4 +64,4 @@ for k in '^[[A' '^[OA'; do bindkey "$k" up-line-or-beginning-search; done
 for k in '^[[B' '^[OB'; do bindkey "$k" down-line-or-beginning-search; done
 
 # Prompt
-eval "$(starship init zsh)"
+(( $+commands[starship] )) && eval "$(starship init zsh)"
