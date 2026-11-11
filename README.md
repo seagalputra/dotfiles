@@ -13,7 +13,7 @@ An interactive installer (`make install`) lets you pick which apps to install; t
 | `zsh`   | `~/.zshrc` | Single, fast (~0.15s) zsh config: plain zsh (no framework), [Starship](https://starship.rs) prompt, case-insensitive completion, shared history, prefix history search |
 | `tmux`  | `~/.tmux.conf` | Minimal tmux config tuned for [Ghostty](https://ghostty.org): true color, extended keys (Shift+Enter works in Claude Code), new panes/windows open in the current directory |
 | `ghostty` | `~/.config/ghostty/` | Minimal [Ghostty](https://ghostty.org) config; every window opens in tmux via `ghostty-tmux.sh` (attaches to session `base` or creates it) |
-| `mise`  | `~/.config/mise/config.toml` | Global language versions via [mise](https://mise.jdx.dev): Node, Python, Ruby, Java, Erlang, Elixir |
+| `mise`  | `~/.config/mise/config.toml` | Global language and tool versions via [mise](https://mise.jdx.dev) |
 
 ## Requirements
 
@@ -91,9 +91,8 @@ stow -D tmux     # unlink one package
 | tmux | Homebrew | `tmux` |
 | Ghostty | Homebrew cask (needs tmux) | `ghostty` |
 | mise | [official installer](https://mise.jdx.dev/installing-mise.html) (Homebrew lags releases) | `mise`; then installs the versions in `config.toml` and enables `pnpm` through Corepack |
-| Starship, Neovim, lazygit, Go, Deno, Bun, kubectl | Homebrew | – |
+| Starship, Neovim, lazygit, kubectl | Homebrew | – |
 | Docker Desktop, Laravel Herd | Homebrew cask | – |
-| Rust | [rustup](https://rustup.rs) (creates `~/.cargo/env`, which `.zshrc` loads) | – |
 
 An app counts as installed when Homebrew has it or when it is already on your `PATH` or in `/Applications`, so tools installed another way are not installed twice.
 
@@ -136,7 +135,7 @@ mv ~/.gitconfig git/
 
 ### Managing tool versions
 
-Global versions live in `mise/.config/mise/config.toml`. Per-project versions are read from `mise.toml`, `.tool-versions`, and the usual version files (`.nvmrc`, `.node-version`, `.python-version`, `.ruby-version`, `.java-version`, `.sdkmanrc`).
+Global versions live in `mise/.config/mise/config.toml`. Per-project versions are read from `mise.toml`, `.tool-versions`, and the version files of the tools listed in `idiomatic_version_file_enable_tools`.
 
 ```sh
 mise use -g node@24          # change a global version (updates the tracked config)

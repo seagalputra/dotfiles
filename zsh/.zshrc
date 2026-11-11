@@ -6,16 +6,14 @@
 # ── Environment & PATH ────────────────────────────────────────────────────
 # Optional tools are guarded so a fresh machine starts cleanly without them.
 [[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
-[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
 
 export PATH="$HOME/.local/bin:$PATH"        # mise, uv, claude, pipx, …
 export PATH="$PATH:$HOME/.docker/bin"
-export PATH="$PATH:$HOME/go/bin"
+export PATH="$PATH:$HOME/go/bin"            # `go install` (mise: go.set_gobin = false)
 export PATH="$PATH:$HOME/.risc0/bin"
 
 export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-[[ -f "$HOME/.deno/env" ]] && . "$HOME/.deno/env"
+export PATH="$PATH:$BUN_INSTALL/bin"        # `bun add -g`; bun itself comes from mise
 
 # Herd injected PHP 8.4 configuration.
 export HERD_PHP_84_INI_SCAN_DIR="/Users/seagalputra/Library/Application Support/Herd/config/php/84/"
@@ -28,7 +26,8 @@ export HERD_PHP_85_INI_SCAN_DIR="/Users/seagalputra/Library/Application Support/
 
 export EDITOR=nvim
 
-# mise: node, python, ruby, java, erlang, elixir (config: ~/.config/mise/config.toml)
+# mise: language and tool versions
+# (config: ~/.config/mise/config.toml). Also puts ~/.cargo/bin on PATH.
 (( $+commands[mise] )) && eval "$(mise activate zsh)"
 
 # ── Interactive only ──────────────────────────────────────────────────────

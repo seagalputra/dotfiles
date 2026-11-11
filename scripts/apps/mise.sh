@@ -3,7 +3,7 @@
 # shellcheck source=scripts/lib.sh
 . "$(dirname "$0")/../lib.sh"
 
-DESC="Language versions: node python ruby java erlang elixir"
+DESC="Language and tool versions"
 CONFIG="mise"
 
 MISE="$HOME/.local/bin/mise"  # where the installer puts it; maybe not on PATH yet
