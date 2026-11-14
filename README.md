@@ -1,17 +1,25 @@
 # dotfiles
 
-Personal configuration, managed with [GNU Stow](https://www.gnu.org/software/stow/). Each top-level directory (except `scripts/`) is a Stow package that mirrors `$HOME`, so configs are symlinked from this repository.
+Personal macOS setup, managed with Nix: [nix-darwin](https://github.com/nix-darwin/nix-darwin) for the system and [Home Manager](https://github.com/nix-community/home-manager) for packages and dotfiles. Packages are listed in `nix/home.nix`.
+
+Each config directory mirrors `$HOME` (for example `nvim/.config/nvim`). Home Manager symlinks those files from this repository, so edits apply without a rebuild.
 
 ## Installation
 
-Requires [Homebrew](https://brew.sh) and Git.
+Requires [Nix](https://nixos.org/download/) (the official installer) and Git.
 
 ```sh
 git clone git@github.com:seagalputra/dotfiles.git
 cd dotfiles
-make install
+sudo nix --extra-experimental-features 'nix-command flakes' \
+  run nix-darwin/master#darwin-rebuild -- switch --flake .
 ```
 
-The installer asks which apps to install, then links the configs of the picked and already installed apps into `~`. Use `make bootstrap` to install and link everything without prompts.
+Clone to the path set as `dotfiles` in `nix/home.nix`, since the config links point there. The host entry in `flake.nix` must match `scutil --get LocalHostName`.
 
 Then open a new terminal, or run `exec zsh -l`.
+
+## Updating
+
+- After changing `nix/` (packages, links): `sudo darwin-rebuild switch --flake .`
+- To update packages: `nix flake update`, then the same command.

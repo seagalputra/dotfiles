@@ -4,16 +4,19 @@
 # hence the interactive-only block at the bottom.
 
 # ── Environment & PATH ────────────────────────────────────────────────────
-# Optional tools are guarded so a fresh machine starts cleanly without them.
-[[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+# Packages and languages come from Nix (nix/home.nix); /etc/zshenv already put
+# its profiles on PATH. Optional tools are guarded so a fresh machine starts cleanly.
+export PATH="$HOME/.local/bin:$PATH"        # claude
+export PATH="$PATH:$HOME/go/bin"            # `go install`
+export PATH="$PATH:$HOME/.cargo/bin"        # `cargo install`
 
-export PATH="$HOME/.local/bin:$PATH"        # mise, uv, claude, pipx, …
-export PATH="$PATH:$HOME/.docker/bin"
-export PATH="$PATH:$HOME/go/bin"            # `go install` (mise: go.set_gobin = false)
-export PATH="$PATH:$HOME/.risc0/bin"
+# Nix's node and ruby are read-only, so global installs go to the home dir.
+export NPM_CONFIG_PREFIX="$HOME/.local/share/npm"   # `npm install -g`
+export GEM_HOME="$HOME/.local/share/gem"            # `gem install`, bundler
+export PATH="$PATH:$NPM_CONFIG_PREFIX/bin:$GEM_HOME/bin"
 
 export BUN_INSTALL="$HOME/.bun"
-export PATH="$PATH:$BUN_INSTALL/bin"        # `bun add -g`; bun itself comes from mise
+export PATH="$PATH:$BUN_INSTALL/bin"        # `bun add -g`
 
 # Herd injected PHP 8.4 configuration.
 export HERD_PHP_84_INI_SCAN_DIR="/Users/seagalputra/Library/Application Support/Herd/config/php/84/"
@@ -25,10 +28,6 @@ export PATH="/Users/seagalputra/Library/Application Support/Herd/bin/":$PATH
 export HERD_PHP_85_INI_SCAN_DIR="/Users/seagalputra/Library/Application Support/Herd/config/php/85/"
 
 export EDITOR=nvim
-
-# mise: language and tool versions
-# (config: ~/.config/mise/config.toml). Also puts ~/.cargo/bin on PATH.
-(( $+commands[mise] )) && eval "$(mise activate zsh)"
 
 # ── Interactive only ──────────────────────────────────────────────────────
 [[ -o interactive ]] || return
@@ -61,6 +60,9 @@ zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
 for k in '^[[A' '^[OA'; do bindkey "$k" up-line-or-beginning-search; done
 for k in '^[[B' '^[OB'; do bindkey "$k" down-line-or-beginning-search; done
+
+# Per-project devShells: direnv loads a project's .envrc (`use flake`) on cd
+(( $+commands[direnv] )) && eval "$(direnv hook zsh)"
 
 # Prompt
 (( $+commands[starship] )) && eval "$(starship init zsh)"

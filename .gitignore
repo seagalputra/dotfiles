@@ -6,3 +6,6 @@
 *.zwc
 .zsh_history
 .zsh_sessions/
+
+# nix build output
+result
