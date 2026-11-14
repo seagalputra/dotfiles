@@ -4,7 +4,6 @@
 node = "24.18.0"
 python = "3.14.7"
 ruby = "4.0.6"
-java = "corretto-24"
 erlang = "29.0.1"
 elixir = "1.20.2-otp-29"
 go = "1.27.3"
@@ -24,9 +23,9 @@ bun = "1.4.4"
 deno = "2.9.8"
 
 [settings]
-# Honor existing .nvmrc / .node-version / .python-version / .ruby-version / .java-version / .sdkmanrc
+# Honor existing .nvmrc / .node-version / .python-version / .ruby-version
 # and rust-toolchain.toml. rust is needed: mise sets RUSTUP_TOOLCHAIN, which otherwise beats the project's file.
-idiomatic_version_file_enable_tools = ["node", "python", "ruby", "java", "rust"]
+idiomatic_version_file_enable_tools = ["node", "python", "ruby", "rust"]
 # `go install` puts bins in ~/go/bin (on PATH in ~/.zshrc), not in the Go version's dir,
 # so they survive Go upgrades.
 go.set_gobin = false
