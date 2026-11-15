@@ -138,6 +138,7 @@ in
         eex
         elixir
         embedded_template
+        fish
         gitcommit
         go
         gomod
@@ -224,6 +225,7 @@ in
       lua_ls.enable = true;
       nixd.enable = true;
       svelte.enable = true;
+      fish_lsp.enable = true; # also formats, with fish_indent
       # Its package is set in languages.nix, built with the same Elixir/OTP as the global one.
       elixirls = {
         enable = true;

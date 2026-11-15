@@ -1,7 +1,10 @@
 # tmux. Ghostty opens every window in its session "base" (ghostty.nix).
+{ config, lib, ... }:
 {
   programs.tmux = {
     enable = true;
+    # Not $SHELL: an app started before the login shell changed still passes the old one.
+    shell = lib.getExe config.programs.fish.package;
     terminal = "tmux-256color";
     focusEvents = true; # Claude Code: away detection for notifications
     clock24 = true; # tmux's own default; Home Manager's is 12-hour

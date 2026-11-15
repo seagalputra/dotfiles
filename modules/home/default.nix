@@ -4,7 +4,7 @@
     ./packages.nix
     ./languages.nix
     ./nvim
-    ./zsh.nix
+    ./fish.nix
     ./tmux.nix
     ./starship.nix
     ./ghostty.nix

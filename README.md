@@ -23,6 +23,8 @@ nix --extra-experimental-features 'nix-command flakes' run
 
 `nix run` activates the machine named after `hostname -s`, with `darwin-rebuild` on macOS or `nixos-rebuild` on NixOS, and asks for sudo. For a new machine, first add its file under `configurations/` (for NixOS, together with its `hardware-configuration.nix`).
 
+On macOS, make fish the login shell once: `chsh -s /run/current-system/sw/bin/fish`.
+
 On other Linux there is only Home Manager: `nix run .#activate <user>@`.
 
 ## Updating

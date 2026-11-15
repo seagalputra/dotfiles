@@ -20,8 +20,8 @@ in
     # machine config (`programs.ghostty.enable = true`); servers leave it off.
     enable = lib.mkDefault isDarwin;
     package = if isDarwin then pkgs.ghostty-bin else pkgs.ghostty;
-    # zsh runs inside tmux, where Ghostty doesn't inject its shell integration either.
-    enableZshIntegration = false;
+    # fish runs inside tmux, where Ghostty doesn't inject its shell integration either.
+    enableFishIntegration = false;
     settings = {
       command = "${tmuxBase}";
       font-size = 15;
