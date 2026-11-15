@@ -1,8 +1,13 @@
 {
-  description = "macOS setup: nix-darwin + home-manager";
+  description = "Nix setup for macOS, NixOS and other Linux, wired with nixos-unified";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+    nixos-unified.url = "github:srid/nixos-unified";
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -19,35 +24,20 @@
     nixvim.url = "github:nix-community/nixvim";
   };
 
+  # Outputs come from the directory layout (https://nixos-unified.org/guide/autowiring):
+  #   configurations/{darwin,nixos,home}/<name>.nix -> one machine or user each
+  #   modules/{darwin,nixos,home}/                  -> shared settings they import
+  #   modules/flake/                                -> flake-level glue
   outputs =
-    {
-      self,
-      nix-darwin,
-      home-manager,
-      rust-overlay,
-      nixvim,
-      ...
-    }:
-    let
-      user = "seagalputra";
-    in
-    {
-      # `darwin-rebuild switch --flake .` picks the entry named after `scutil --get LocalHostName`.
-      darwinConfigurations."Seagals-MacBook-Pro" = nix-darwin.lib.darwinSystem {
-        specialArgs = { inherit self user; };
-        modules = [
-          ./nix/darwin.nix
-          { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
-          home-manager.darwinModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            # Files that are in the way (old Stow links, ~/.config/nvim) are moved aside, not overwritten.
-            home-manager.backupFileExtension = "before-nix";
-            home-manager.sharedModules = [ nixvim.homeModules.nixvim ];
-            home-manager.users.${user} = ./nix/home.nix;
-          }
-        ];
-      };
+    inputs:
+    inputs.nixos-unified.lib.mkFlake {
+      inherit inputs;
+      root = ./.;
+      # nixos-unified's default also has x86_64-darwin, which nixpkgs 26.11 dropped.
+      systems = [
+        "aarch64-darwin"
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
     };
 }

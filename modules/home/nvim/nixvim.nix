@@ -1,5 +1,5 @@
 # Neovim, configured with nixvim (https://nix-community.github.io/nixvim/).
-# A nixvim module, imported by `programs.nixvim` in home.nix. Plugins, language servers
+# A nixvim module, imported by `programs.nixvim` in default.nix. Plugins, language servers
 # and formatters come from Nix; nothing is downloaded at runtime. Kept lean: add plugins
 # when they are needed.
 { config, ... }:
@@ -224,7 +224,7 @@ in
       lua_ls.enable = true;
       nixd.enable = true;
       svelte.enable = true;
-      # Its package is set in home.nix, built with the same Elixir/OTP as the global one.
+      # Its package is set in languages.nix, built with the same Elixir/OTP as the global one.
       elixirls = {
         enable = true;
         config.cmd = [ "elixir-ls" ]; # lspconfig has no default command for it
