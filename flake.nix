@@ -15,6 +15,8 @@
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # No `follows`: nixvim is tested against its own nixpkgs revision.
+    nixvim.url = "github:nix-community/nixvim";
   };
 
   outputs =
@@ -23,6 +25,7 @@
       nix-darwin,
       home-manager,
       rust-overlay,
+      nixvim,
       ...
     }:
     let
@@ -41,6 +44,7 @@
             home-manager.useUserPackages = true;
             # Files that are in the way (old Stow links, ~/.config/nvim) are moved aside, not overwritten.
             home-manager.backupFileExtension = "before-nix";
+            home-manager.sharedModules = [ nixvim.homeModules.nixvim ];
             home-manager.users.${user} = ./nix/home.nix;
           }
         ];

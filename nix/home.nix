@@ -4,6 +4,8 @@ let
   dotfiles = "${config.home.homeDirectory}/Documents/sources/dotfiles";
   # Link to the file in this repo, not a copy in the Nix store, so edits apply without a rebuild.
   link = path: config.lib.file.mkOutOfStoreSymlink "${dotfiles}/${path}";
+  # Erlang/OTP 29 with Elixir 1.20. Also builds elixir-ls, so it matches the global Elixir.
+  beam = pkgs.beam.packages.erlang_29.overrideScope (final: _: { elixir = final.elixir_1_20; });
 in
 {
   home.stateVersion = "26.11";
@@ -16,7 +18,6 @@ in
     lazygit
     libimobiledevice
     mole-cleaner # `mo`
-    neovim
     ripgrep
     shellcheck
     starship
@@ -31,8 +32,8 @@ in
     python314
     ruby_4_0
     go_1_27
-    beam.packages.erlang_29.erlang
-    beam.packages.erlang_29.elixir_1_20
+    beam.erlang
+    beam.elixir
     (rust-bin.stable.latest.default.override {
       extensions = [ "rust-src" ];
       targets = [
@@ -44,6 +45,13 @@ in
     })
   ];
 
+  # Neovim and its whole config: see nvim.nix.
+  programs.nixvim = {
+    enable = true;
+    imports = [ ./nvim.nix ];
+    lsp.servers.elixirls.package = beam.elixir-ls;
+  };
+
   # Loads a project's devShell on `cd` (via .envrc `use flake`). Hooked into zsh in ~/.zshrc.
   programs.direnv = {
     enable = true;
@@ -53,6 +61,5 @@ in
   home.file.".zshrc".source = link "zsh/.zshrc";
   home.file.".tmux.conf".source = link "tmux/.tmux.conf";
   xdg.configFile."ghostty".source = link "ghostty/.config/ghostty";
-  xdg.configFile."nvim".source = link "nvim/.config/nvim";
   xdg.configFile."starship.toml".source = link "starship/.config/starship.toml";
 }

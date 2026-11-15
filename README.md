@@ -2,7 +2,9 @@
 
 Personal macOS setup, managed with Nix: [nix-darwin](https://github.com/nix-darwin/nix-darwin) for the system and [Home Manager](https://github.com/nix-community/home-manager) for packages and dotfiles. Packages are listed in `nix/home.nix`.
 
-Each config directory mirrors `$HOME` (for example `nvim/.config/nvim`). Home Manager symlinks those files from this repository, so edits apply without a rebuild.
+Each config directory mirrors `$HOME` (for example `ghostty/.config/ghostty`). Home Manager symlinks those files from this repository, so edits apply without a rebuild.
+
+Neovim is configured in Nix with [nixvim](https://github.com/nix-community/nixvim), in `nix/nvim.nix`. Plugins, language servers and formatters come from Nix, so changes there need a rebuild.
 
 ## Installation
 
@@ -21,5 +23,5 @@ Then open a new terminal, or run `exec zsh -l`.
 
 ## Updating
 
-- After changing `nix/` (packages, links): `sudo darwin-rebuild switch --flake .`
+- After changing `nix/` (packages, links, Neovim): `sudo darwin-rebuild switch --flake .`
 - To update packages: `nix flake update`, then the same command.
