@@ -5,6 +5,7 @@
     terminal = "tmux-256color";
     focusEvents = true; # Claude Code: away detection for notifications
     clock24 = true; # tmux's own default; Home Manager's is 12-hour
+    mouse = true; # click windows in the status bar, select and resize panes
 
     extraConfig = ''
       set -as terminal-features ",xterm-ghostty:RGB:extkeys"
