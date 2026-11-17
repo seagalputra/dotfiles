@@ -74,7 +74,10 @@
       bind '"' split-window -v -c "#{pane_current_path}"
       bind %   split-window -h -c "#{pane_current_path}"
       bind c   new-window      -c "#{pane_current_path}"
-      bind *   new-pane        -c "#{pane_current_path}" # floating pane
+      # Floating panes, centred: -X/-Y = (100% - size) / 2
+      bind *   new-pane        -c "#{pane_current_path}" -x 50% -y 25% -X 25% -Y 37%
+      # Model and effort flags apply to this session only; saved settings stay as they are.
+      bind a   new-pane        -c "#{pane_current_path}" -x 80% -y 80% -X 10% -Y 10% "claude --model haiku --effort low"
 
       # Popups default to the session's directory; `popup` (prompt or shell) uses the pane's.
       # A later -d still wins.
