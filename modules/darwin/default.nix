@@ -26,4 +26,17 @@ in
   programs.fish.enable = true;
   environment.shells = [ pkgs.fish ];
   programs.zsh.enable = true;
+
+  # The Wi-Fi name in tmux's status line: since macOS 14.4 `ipconfig getsummary` shows it
+  # as "<redacted>" unless IPConfiguration's verbose mode is on (which also logs more).
+  # Turned on at every boot; retried until it succeeds.
+  launchd.daemons.ipconfig-verbose.serviceConfig = {
+    ProgramArguments = [
+      "/usr/sbin/ipconfig"
+      "setverbose"
+      "1"
+    ];
+    RunAtLoad = true;
+    KeepAlive.SuccessfulExit = false;
+  };
 }
