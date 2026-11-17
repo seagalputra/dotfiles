@@ -9,9 +9,13 @@
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
   tmux = lib.getExe config.programs.tmux.package;
-  # Every window opens inside tmux: attach to session "base", or create it.
-  tmuxBase = pkgs.writeShellScript "ghostty-tmux" ''
-    ${tmux} attach-session -t base || ${tmux} new-session -s base
+  # Every window opens inside tmux: attach to the most recently used session not open
+  # in another window, or create "base" when there is none.
+  # From the Dock, Ghostty only gets launchd's PATH; the tmux server keeps it, and
+  # tmux plugins call `tmux` by name.
+  tmuxAttach = pkgs.writeShellScript "ghostty-tmux" ''
+    export PATH="${lib.makeBinPath [ config.programs.tmux.package ]}:$PATH"
+    ${tmux} attach-session || ${tmux} new-session -s base
   '';
 in
 {
@@ -23,7 +27,7 @@ in
     # fish runs inside tmux, where Ghostty doesn't inject its shell integration either.
     enableFishIntegration = false;
     settings = {
-      command = "${tmuxBase}";
+      command = "${tmuxAttach}";
       font-size = 15;
     }
     // lib.optionalAttrs isDarwin {

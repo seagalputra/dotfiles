@@ -1,5 +1,10 @@
-# tmux. Ghostty opens every window in its session "base" (ghostty.nix).
-{ config, lib, ... }:
+# tmux. Ghostty attaches every window to the last used session (ghostty.nix).
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   programs.tmux = {
     enable = true;
@@ -9,6 +14,24 @@
     focusEvents = true; # Claude Code: away detection for notifications
     clock24 = true; # tmux's own default; Home Manager's is 12-hour
     mouse = true; # click windows in the status bar, select and resize panes
+
+    # Sessions survive a restart: prefix C-s saves, prefix C-r restores (~/.tmux/resurrect).
+    plugins = with pkgs.tmuxPlugins; [
+      {
+        plugin = resurrect;
+        # Nix's nvim is saved as /nix/store/.../nvim --cmd ...vim-pack-dir, which the default
+        # `nvim` entry never matches; restart it as plain `nvim` (open files are not reopened).
+        # claude picks up the pane directory's latest conversation.
+        extraConfig = ''
+          set -g @resurrect-processes 'lazygit "~vim-pack-dir->nvim" "claude->claude --continue"'
+        '';
+      }
+      {
+        plugin = continuum; # after resurrect
+        # Saves every 15 minutes; restores when the tmux server starts
+        extraConfig = "set -g @continuum-restore 'on'";
+      }
+    ];
 
     extraConfig = ''
       set -as terminal-features ",xterm-ghostty:RGB:extkeys"
@@ -51,6 +74,11 @@
       bind '"' split-window -v -c "#{pane_current_path}"
       bind %   split-window -h -c "#{pane_current_path}"
       bind c   new-window      -c "#{pane_current_path}"
+      bind *   new-pane        -c "#{pane_current_path}" # floating pane
+
+      # Popups default to the session's directory; `popup` (prompt or shell) uses the pane's.
+      # A later -d still wins.
+      set -s command-alias[100] 'popup=display-popup -d "#{pane_current_path}"'
     '';
   };
 }
