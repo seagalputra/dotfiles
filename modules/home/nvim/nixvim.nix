@@ -1,8 +1,7 @@
 # Neovim, configured with nixvim (https://nix-community.github.io/nixvim/).
-# A nixvim module, imported by `programs.nixvim` in default.nix. Plugins, language servers
-# and formatters come from Nix; nothing is downloaded at runtime. Kept lean: add plugins
-# when they are needed.
-{ config, ... }:
+# A nixvim module, imported by `programs.nixvim` in default.nix. Plugins come from Nix;
+# nothing is downloaded at runtime. Kept lean: add plugins when they are needed.
+{ config, pkgs, ... }:
 let
   # Same colors as the terminal. Ghostty uses its default theme (no `theme` set):
   # background #282c34 and the Tomorrow Night ANSI palette.
@@ -175,8 +174,9 @@ in
     };
     conform-nvim = {
       enable = true;
-      autoInstall.enable = true; # installs the formatters listed below
+      autoInstall.enable = false; # from the project's devShell
       settings = {
+        notify_no_formatters = false;
         format_on_save = {
           timeout_ms = 1000;
           lsp_format = "fallback";
@@ -210,28 +210,42 @@ in
   # claudecode would add nixpkgs' claude-code; use the `claude` already on PATH instead.
   dependencies.claude-code.enable = false;
 
+  withRuby = false;
+  withPython3 = false;
+
+  extraPackages = with pkgs; [
+    nixfmt
+    shfmt
+  ];
+
   lsp = {
-    servers = {
-      gopls.enable = true;
-      vtsls.enable = true;
-      pyright.enable = true;
-      ruff.enable = true;
-      ruby_lsp.enable = true;
-      jsonls.enable = true;
-      marksman.enable = true;
-      taplo.enable = true;
-      dockerls.enable = true;
-      docker_compose_language_service.enable = true;
-      lua_ls.enable = true;
-      nixd.enable = true;
-      svelte.enable = true;
-      fish_lsp.enable = true; # also formats, with fish_indent
-      # Its package is set in languages.nix, built with the same Elixir/OTP as the global one.
-      elixirls = {
-        enable = true;
-        config.cmd = [ "elixir-ls" ]; # lspconfig has no default command for it
+    servers =
+      let
+        fromPath = {
+          enable = true;
+          package = null; # from the project's devShell
+        };
+      in
+      {
+        gopls = fromPath;
+        vtsls = fromPath;
+        pyright = fromPath;
+        ruff = fromPath;
+        ruby_lsp = fromPath;
+        svelte = fromPath;
+        lua_ls = fromPath;
+        elixirls = fromPath // {
+          config.cmd = [ "elixir-ls" ]; # lspconfig has no default command for it
+        };
+
+        jsonls.enable = true;
+        marksman.enable = true;
+        taplo.enable = true;
+        dockerls.enable = true;
+        docker_compose_language_service.enable = true;
+        nixd.enable = true;
+        fish_lsp.enable = true; # also formats, with fish_indent
       };
-    };
     # Neovim already maps K, grn, gra, grr, gri and [d / ]d.
     keymaps = [
       {

@@ -2,7 +2,6 @@
 {
   imports = [
     ./packages.nix
-    ./languages.nix
     ./nvim
     ./fish.nix
     ./tmux.nix

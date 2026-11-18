@@ -16,10 +16,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     # No `follows`: nixvim is tested against its own nixpkgs revision.
     nixvim.url = "github:nix-community/nixvim";
   };

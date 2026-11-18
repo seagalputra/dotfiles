@@ -1,5 +1,5 @@
-# Command-line tools. Languages are in languages.nix; tools with their own module
-# (tmux, starship, direnv, ...) are installed by it.
+# Command-line tools. Tools with their own module (tmux, starship, direnv, ...) are
+# installed by it.
 { lib, pkgs, ... }:
 {
   home.packages =

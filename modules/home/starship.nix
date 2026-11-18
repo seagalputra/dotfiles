@@ -16,7 +16,6 @@
         "$nodejs"
         "$rust"
         "$golang"
-        "$php"
         "[](fg:#212736 bg:#1d2230)"
         "$time"
         "[ ](fg:#1d2230)"
@@ -56,11 +55,6 @@
       };
       golang = {
         symbol = "";
-        style = "bg:#212736";
-        format = "[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)";
-      };
-      php = {
-        symbol = "";
         style = "bg:#212736";
         format = "[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)";
       };
