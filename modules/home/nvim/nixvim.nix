@@ -1,7 +1,12 @@
 # Neovim, configured with nixvim (https://nix-community.github.io/nixvim/).
 # A nixvim module, imported by `programs.nixvim` in default.nix. Plugins come from Nix;
 # nothing is downloaded at runtime. Kept lean: add plugins when they are needed.
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   # Same colors as the terminal. Ghostty uses its default theme (no `theme` set):
   # background #282c34 and the Tomorrow Night ANSI palette.
@@ -26,6 +31,16 @@ let
   };
 
   picker = fn: { __raw = "function() Snacks.${fn}() end"; };
+
+  # nixpkgs bundles Chromium with mmdc only where Chromium builds; on macOS use the installed Chrome.
+  mmdc =
+    if pkgs.stdenv.hostPlatform.isDarwin then
+      pkgs.writeShellScriptBin "mmdc" ''
+        export PUPPETEER_EXECUTABLE_PATH="''${PUPPETEER_EXECUTABLE_PATH:-/Applications/Google Chrome.app/Contents/MacOS/Google Chrome}"
+        exec ${lib.getExe pkgs.mermaid-cli} "$@"
+      ''
+    else
+      pkgs.mermaid-cli;
 in
 {
   globals = {
@@ -122,6 +137,7 @@ in
         explorer.enabled = true;
         lazygit.enabled = true;
         bufdelete.enabled = true;
+        image.enabled = true;
       };
     };
 
@@ -165,6 +181,12 @@ in
         vimdoc
         yaml
       ];
+    };
+
+    render-markdown = {
+      enable = true;
+      # "hide" conceals the closing fence, and with it the Snacks image (mermaid) drawn below
+      settings.code.border = "thin";
     };
 
     lspconfig.enable = true; # default configs for the servers in `lsp.servers`
@@ -216,6 +238,8 @@ in
   extraPackages = with pkgs; [
     nixfmt
     shfmt
+    imagemagick # snacks image
+    mmdc
   ];
 
   lsp = {
