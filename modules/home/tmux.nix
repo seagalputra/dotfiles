@@ -186,7 +186,8 @@ in
       set -g status-left-length           40
       set -g window-status-separator      ""
       set -g window-status-current-style  default # tmux's own is underscore
-      set -g window-status-format         "#[fg=brightblack] #I #W#{?window_zoomed_flag, Z,} "
+      set -g window-status-bell-style     default
+      set -g window-status-format         "#[fg=brightblack] #I #W#{?window_zoomed_flag, Z,}#{?window_bell_flag, #[fg=yellow]󰂞,} "
       set -g window-status-current-format "#{?window_start_flag,,#[fg=brightblack]#[bg=default]#[reverse]}#[noreverse,fg=white,bg=brightblack,bold] #I #W#{?window_zoomed_flag, Z,} #[fg=brightblack,bg=default,nobold]"
       # status-right (network, battery, date, time) is set with the continuum plugin above
       set -g status-right-length          80
