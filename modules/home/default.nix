@@ -8,5 +8,6 @@
     ./starship.nix
     ./ghostty.nix
     ./direnv.nix
+    ./opencode.nix
   ];
 }

@@ -154,9 +154,9 @@ in
         plugin = resurrect;
         # Nix's nvim is saved as /nix/store/.../nvim --cmd ...vim-pack-dir, which the default
         # `nvim` entry never matches; restart it as plain `nvim` (open files are not reopened).
-        # claude picks up the pane directory's latest conversation.
+        # claude picks up the pane directory's latest conversation, opencode its last session.
         extraConfig = ''
-          set -g @resurrect-processes 'lazygit "~vim-pack-dir->nvim" "claude->claude --continue"'
+          set -g @resurrect-processes 'lazygit "~vim-pack-dir->nvim" "claude->claude --continue" "opencode->opencode --continue"'
         '';
       }
       {
@@ -223,6 +223,7 @@ in
       bind *   new-pane        -c "#{pane_current_path}" -x 50% -y 25% -X 25% -Y 37%
       # Model and effort flags apply to this session only; saved settings stay as they are.
       bind a   new-pane        -c "#{pane_current_path}" -x 80% -y 80% -X 10% -Y 10% "${lib.getExe claude} --model haiku --effort low"
+      bind O   new-pane        -c "#{pane_current_path}" -x 80% -y 80% -X 10% -Y 10% opencode
 
       # Popups default to the session's directory; `popup` (prompt or shell) uses the pane's.
       # A later -d still wins.
