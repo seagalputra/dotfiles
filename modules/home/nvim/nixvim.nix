@@ -226,7 +226,38 @@ in
       };
     };
 
-    claudecode.enable = true;
+    claudecode = {
+      enable = true;
+      # The tmux pane's @claude_ide_port points Claude Code at this Neovim (prefix a, tmux.nix).
+      luaConfig.post = ''
+        local claudecode = require("claudecode")
+        local selection = require("claudecode.selection")
+
+        local pane = vim.env.TMUX_PANE
+        if pane and claudecode.state.port then
+          vim.system({ "tmux", "set-option", "-p", "-t", pane, "@claude_ide_port", tostring(claudecode.state.port) })
+          vim.api.nvim_create_autocmd("VimLeavePre", {
+            callback = function()
+              vim.system({ "tmux", "set-option", "-pu", "-t", pane, "@claude_ide_port" }):wait()
+            end,
+          })
+        end
+
+        -- Selections are only sent when they change; send the current one to a new client too.
+        local process_mention_queue = claudecode.process_mention_queue
+        claudecode.process_mention_queue = function(from_new_connection)
+          process_mention_queue(from_new_connection)
+          if from_new_connection then
+            vim.defer_fn(function()
+              local latest = selection.get_latest_selection()
+              if latest then
+                selection.send_selection_update(latest)
+              end
+            end, claudecode.state.config.connection_wait_delay)
+          end
+        end
+      '';
+    };
   };
 
   # claudecode would add nixpkgs' claude-code; use the `claude` already on PATH instead.

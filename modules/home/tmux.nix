@@ -127,6 +127,16 @@ let
       sep brightblack white
     '';
   };
+
+  # Claude Code connected to the Neovim in the pane it opens over (its @claude_ide_port, set by nvim)
+  claude = pkgs.writeShellApplication {
+    name = "tmux-claude";
+    text = ''
+      port=$(tmux display-message -p -t '{last}' '#{@claude_ide_port}' 2>/dev/null || true)
+      if [[ -n $port ]]; then export CLAUDE_CODE_SSE_PORT=$port; fi
+      exec claude "$@"
+    '';
+  };
 in
 {
   programs.tmux = {
@@ -212,7 +222,7 @@ in
       # Floating panes, centred: -X/-Y = (100% - size) / 2
       bind *   new-pane        -c "#{pane_current_path}" -x 50% -y 25% -X 25% -Y 37%
       # Model and effort flags apply to this session only; saved settings stay as they are.
-      bind a   new-pane        -c "#{pane_current_path}" -x 80% -y 80% -X 10% -Y 10% "claude --model haiku --effort low"
+      bind a   new-pane        -c "#{pane_current_path}" -x 80% -y 80% -X 10% -Y 10% "${lib.getExe claude} --model haiku --effort low"
 
       # Popups default to the session's directory; `popup` (prompt or shell) uses the pane's.
       # A later -d still wins.
